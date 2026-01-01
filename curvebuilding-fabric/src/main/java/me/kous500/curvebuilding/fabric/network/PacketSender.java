@@ -44,7 +44,7 @@ public class PacketSender {
 
         if (!playerList.contains(player)) playerList.add(player);
 
-        if (posData.worldId != null && posData.worldId.equals(FabricAdapter.adapt(player.getWorld()).id())) {
+        if (posData.worldId != null && posData.worldId.equals(FabricAdapter.adapt(player.getServerWorld()).id())) {
             ServerPlayNetworking.send(player, new PosDataPayload(posData.p));
         } else {
             ServerPlayNetworking.send(player, new PosDataPayload(new TreeMap<>()));

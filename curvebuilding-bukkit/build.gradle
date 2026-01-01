@@ -1,61 +1,20 @@
 plugins {
     id "java-library"
-    id "com.github.johnrengelman.shadow" version "7.0.0"
-}
-
-repositories {
-    maven {
-        name = "spigotmc-repo"
-        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
-    }
-    maven {
-        name = "sonatype"
-        url = "https://oss.sonatype.org/content/groups/public/"
-    }
-    maven {
-        name = "enginehub-maven"
-        url = uri("https://maven.enginehub.org/repo/")
-    }
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
+    id "com.gradleup.shadow"
 }
 
 dependencies {
-    compileOnly "org.spigotmc:spigot-api:1.21.10-R0.1-SNAPSHOT"
-    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.17") {
+    compileOnly "org.spigotmc:spigot-api:${spigot_api_version}"
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:${worldedit_version}") {
         exclude group: 'com.google.guava', module: 'guava'
     }
-    compileOnly "org.jetbrains:annotations:24.1.0"
-    api "com.github.fierioziy.particlenativeapi:ParticleNativeAPI-core:4.5.0"
+    compileOnly "org.jetbrains:annotations:${annotations_version}"
+    implementation "com.github.fierioziy.particlenativeapi:ParticleNativeAPI-core:${particlenativeapi_version}"
     api project(':curvebuilding-core')
 }
 
 shadowJar {
-    archiveClassifier = ""
-}
-
-jar {
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    from sourceSets.main.output
-}
-
-def targetJavaVersion = 21
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release = targetJavaVersion
-    }
+    archiveClassifier.set("")
 }
 
 processResources {
@@ -65,12 +24,4 @@ processResources {
     filesMatching("plugin.yml") {
         expand props
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = "UTF-8"
-}
-
-tasks.withType(Javadoc).configureEach {
-    options.encoding = "UTF-8"
 }

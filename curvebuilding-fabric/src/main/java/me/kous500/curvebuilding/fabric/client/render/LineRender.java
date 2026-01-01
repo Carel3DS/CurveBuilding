@@ -16,17 +16,18 @@ public class LineRender extends Render {
     @Override
     void setRender(Matrix4f matrix, boolean isThroughWalls) {
         this.matrix = matrix;
-        buffer = Tessellator.getInstance().begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
+        this.buffer = Tessellator.getInstance().getBuffer();
+        this.buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
         this.isThroughWalls = isThroughWalls;
         currentIsBuilding = true;
     }
 
     /**
-     * 直方体の中に交差した線を描画します
+     * Draws crossed lines inside a cuboid.
      *
-     * @param color      線の色
-     * @param start      始点の座標
-     * @param dimensions 大きさ
+     * @param color      Line color
+     * @param start      Start coordinates
+     * @param dimensions Size
      */
     public void addCrossing(Color color, Vec3d start, Vec3d dimensions) {
         Vec3d end = start.add(dimensions);
@@ -44,11 +45,11 @@ public class LineRender extends Render {
     }
 
     /**
-     * ブロックの輪郭を描画します
+     * Draws the outline of the block.
      *
-     * @param color      線の色
-     * @param start      始点の座標
-     * @param dimensions 大きさ
+     * @param color      Line color
+     * @param start      Start coordinates
+     * @param dimensions Size
      */
     public void addOutline(Color color, Vec3d start, Vec3d dimensions) {
         genericAABBRender(
@@ -91,11 +92,11 @@ public class LineRender extends Render {
     }
 
     /**
-     * 線を描画します
+     * Draws a line.
      *
-     * @param color    線の色
-     * @param start    始点の座標
-     * @param end      終点の座標
+     * @param color    Line color
+     * @param start    Start coordinates
+     * @param end      End coordinates
      */
     public void addLine(Color color, Vec3d start, Vec3d end) {
         if (!currentIsBuilding) return;

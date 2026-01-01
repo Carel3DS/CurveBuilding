@@ -16,17 +16,18 @@ public class FilledRender extends Render {
     @Override
     void setRender(Matrix4f matrix, boolean isThroughWalls) {
         this.matrix = matrix;
-        buffer = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        this.buffer = Tessellator.getInstance().getBuffer();
+        this.buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         this.isThroughWalls = isThroughWalls;
         currentIsBuilding = true;
     }
 
     /**
-     * 塗りつぶされたブロックを描画します
+     * Draws a filled block.
      *
-     * @param color      塗りつぶす色
-     * @param start      始点の座標
-     * @param dimensions 大きさ
+     * @param color      Fill color
+     * @param start      Start coordinates
+     * @param dimensions Size
      */
     public void renderFilled(Color color, Vec3d start, Vec3d dimensions) {
         genericAABBRender(

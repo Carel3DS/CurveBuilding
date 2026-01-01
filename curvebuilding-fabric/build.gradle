@@ -1,18 +1,9 @@
 plugins {
-    id "java-library"
-    id "com.github.johnrengelman.shadow" version "7.0.0"
-    id 'fabric-loom' version '1.13-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom-remap' version '1.14-SNAPSHOT'
 }
 
 version = project.mod_version
 group = project.maven_group
-
-repositories {
-    maven {
-        name = "enginehub-maven"
-        url = uri("https://maven.enginehub.org/repo/")
-    }
-}
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -20,34 +11,16 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation "com.sk89q.worldedit:worldedit-fabric-mc1.21.10:7.3.17"
-    compileOnly "org.jetbrains:annotations:24.1.0"
-    include "org.yaml:snakeyaml:2.2"
+    modImplementation "com.sk89q.worldedit:worldedit-fabric-mc${project.minecraft_version}:${project.worldedit_version}"
+    compileOnly "org.jetbrains:annotations:${project.annotations_version}"
 
-    implementation project(path: ":curvebuilding-core")
-    include project(":curvebuilding-core")
-}
-
-def targetJavaVersion = 21
-tasks.withType(JavaCompile).configureEach {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
-    it.options.encoding = "UTF-8"
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        it.options.release = targetJavaVersion
-    }
+    implementation project(':curvebuilding-core')
 }
 
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-    archivesBaseName = project.archives_base_name
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
     withSourcesJar()
+}
+
+jar {
+    archiveBaseName.set(project.archives_base_name)
 }

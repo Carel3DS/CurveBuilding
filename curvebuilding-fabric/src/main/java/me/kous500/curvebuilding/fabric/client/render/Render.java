@@ -2,7 +2,7 @@ package me.kous500.curvebuilding.fabric.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.ShaderProgramKeys;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.*;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
@@ -18,11 +18,11 @@ public abstract class Render {
     private static final Logger log = LoggerFactory.getLogger(Render.class);
 
     /**
-     * actionのレンダリング処理を実行します
+     * Executes the rendering process of the action.
      *
-     * @param renderThroughWalls 壁を通過して描画を行うか
-     * @param render 使用するレンダー
-     * @param action レンダリング処理の内容
+     * @param renderThroughWalls Whether to render through walls
+     * @param render The render to use
+     * @param action The content of the rendering process
      */
     public static <T extends Render> void setRender(Matrix4f matrix, boolean renderThroughWalls, T render, RenderSetAction<T> action) {
         render.setRender(matrix, renderThroughWalls);
@@ -50,7 +50,6 @@ public abstract class Render {
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.enableDepthTest();
-        RenderSystem.lineWidth(10.0f);
         RenderSystem.depthFunc(isThroughWalls ? GL11.GL_ALWAYS : GL11.GL_LEQUAL);
 
         if(!said){
@@ -62,13 +61,13 @@ public abstract class Render {
                 log.warn("There is no shader in the RenderSystem");
             }
         }
-        RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
-        try (BuiltBuffer builtBuffer = buffer.endNullable()) {
-            if (builtBuffer != null) {
-                BufferRenderer.drawWithGlobalProgram(builtBuffer);
-            }
+        BufferBuilder.RenderedBuffer builtBuffer = buffer.end();
+        if (builtBuffer != null) {
+            BufferRenderer.draw(builtBuffer);
         }
+        builtBuffer.close();
 
         RenderSystem.enableCull();
         RenderSystem.disableBlend();

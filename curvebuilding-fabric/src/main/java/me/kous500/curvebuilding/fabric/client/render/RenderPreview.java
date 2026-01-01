@@ -20,7 +20,7 @@ public class RenderPreview {
     private static final Vec3d INCREASE_VEC = new Vec3d(INCREASE, INCREASE, INCREASE);
 
     /**
-     * クライアントのPosDataからプレビューを描画します
+     * Renders a preview from the client's PosData.
      *
      * @param matrix MatrixStack
      */

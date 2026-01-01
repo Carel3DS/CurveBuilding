@@ -1,3 +1,11 @@
-//TODO: Bind Fabric to Root Gradle
+pluginManagement {
+    repositories {
+        maven {
+            url 'https://maven.fabricmc.net/'
+        }
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = "CurveBuilding"
-include ":curvebuilding-core", ":curvebuilding-bukkit"
+include ":curvebuilding-core", ":curvebuilding-fabric", ":curvebuilding-bukkit"

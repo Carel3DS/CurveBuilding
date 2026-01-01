@@ -1,7 +1,10 @@
 package me.kous500.curvebuilding.fabric.client.render.mixin;
 
-import net.minecraft.client.render.*;
-import net.minecraft.client.util.ObjectAllocator;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,18 +16,8 @@ import static me.kous500.curvebuilding.fabric.client.render.RenderPreview.Render
 @Mixin(WorldRenderer.class)
 public abstract class GameRendererMixin {
 
-    @Inject(at = @At("RETURN"), method =
-            "render(" +
-                    "Lnet/minecraft/client/util/ObjectAllocator;" +
-                    "Lnet/minecraft/client/render/RenderTickCounter;" +
-                    "Z" +
-                    "Lnet/minecraft/client/render/Camera;" +
-                    "Lnet/minecraft/client/render/GameRenderer;" +
-                    "Lorg/joml/Matrix4f;" +
-                    "Lorg/joml/Matrix4f;" +
-                    ")V"
-    )
-    private void renderer_postWorldRender(ObjectAllocator allocator, RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
-        RenderPosData(matrix4f);
+    @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lorg/joml/Matrix4f;)V", at = @At("RETURN"))
+    private void renderer_postWorldRender(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f projectionMatrix, CallbackInfo ci) {
+        RenderPosData(matrices.peek().getPositionMatrix());
     }
 }
