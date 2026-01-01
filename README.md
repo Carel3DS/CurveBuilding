@@ -25,12 +25,16 @@ If you want to contribute to the CurveBuilding project by adding features, fixin
 
 ### Setting up the Development Environment
 
+The following instructions are specific for IntelliJ IDEA (preferred IDE):
+
 1. Download CurveBuilding's source code using Git.
 2. Download and install [IntelliJ IDEA](https://www.jetbrains.com/idea/download/).
 3. Install the **Minecraft Development** plugin in IDEA.
 4. In the IDEA, open the folder where you saved CurveBuilding's code. This will create a new project in IDEA.
 5. Set the project SDK version to 21.
 6. If the analysis for curvebuilding-fabric isn't performed, add a link to curvebuilding-fabric from the Gradle tool window.
+
+Alternatively, other IDEs that handle Java such as VS Code can be used to edit the code. Please check specific instructions to set up your IDE to work with Minecraft mods
 
 ### Running the Project
 
