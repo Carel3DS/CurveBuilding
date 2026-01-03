@@ -6,6 +6,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+
+import net.minecraft.command.DefaultPermissions;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -72,9 +74,12 @@ public class Pos implements RunCommand{
             }
 
             dispatcher.register(
-                    literal(posCommandName)
-                            .then(builder)
-                            .requires(commandSource -> commandSource.hasPermissionLevel(2))
+                literal(posCommandName)
+                    .then(builder)
+                    .requires(commandSource -> commandSource
+                        .getPermissions()
+                        .hasPermission(DefaultPermissions.GAMEMASTERS)
+                )
             );
         }
     }

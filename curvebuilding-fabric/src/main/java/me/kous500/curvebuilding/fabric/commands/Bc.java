@@ -7,6 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.sk89q.worldedit.entity.Player;
 import me.kous500.curvebuilding.commands.bc.BcCommand;
 import me.kous500.curvebuilding.commands.bc.BcEdit;
+import net.minecraft.command.DefaultPermissions;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -54,7 +55,10 @@ public class Bc implements RunCommand {
                 .then(builderOption)
                 .then(builderN)
                 .executes(context -> debugRun(new Bc(context)))
-                .requires(commandSource -> commandSource.hasPermissionLevel(2));
+                .requires(commandSource -> commandSource
+                    .getPermissions()
+                    .hasPermission(DefaultPermissions.GAMEMASTERS)
+                );
 
         dispatcher.register(builder);
     }
